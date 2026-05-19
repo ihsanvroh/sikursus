@@ -20,7 +20,10 @@ class TagihanReminder extends Notification {
             'judul' => $this->judul,
             'body' => $this->body,
             'tagihan_id' => $this->tagihan_id,
-            'url' => $this->tagihan_id ? '/tagihan/' . $this->tagihan_id : null,
+            'tipe' => 'tagihan',
+            // url biar di-derive role-aware oleh NotifikasiController@open;
+            // tapi tetap kasih literal '/tagihan/{id}' sebagai fallback historis (admin).
+            'url' => null,
         ];
     }
 }

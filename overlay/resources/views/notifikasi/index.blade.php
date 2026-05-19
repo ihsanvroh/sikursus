@@ -16,8 +16,13 @@
           </div>
           <p class="mb-1" style="white-space:pre-wrap">{{ $n->data['body'] ?? '' }}</p>
           <small class="text-muted">{{ $n->created_at->diffForHumans() }} · {{ $n->created_at->format('d M Y H:i') }}</small>
-          @if(!empty($n->data['url']))
-            <div><a href="{{ $n->data['url'] }}" class="btn btn-sm btn-link p-0">Lihat detail →</a></div>
+          @php
+            $hasTarget = !empty($n->data['url'])
+                || !empty($n->data['kelas_id'])
+                || !empty($n->data['tagihan_id']);
+          @endphp
+          @if($hasTarget)
+            <div><a href="{{ route('notifikasi.open', $n->id) }}" class="btn btn-sm btn-link p-0">Lihat detail →</a></div>
           @endif
         </div>
         @if(!$n->read_at)

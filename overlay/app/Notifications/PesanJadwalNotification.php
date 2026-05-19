@@ -24,6 +24,8 @@ class PesanJadwalNotification extends Notification {
             'judul' => $this->judul,
             'body' => $this->body,
             'kelas_id' => $this->kelasId,
+            // Default url di-derive role-aware oleh NotifikasiController@open;
+            // kalau caller mau override, tinggal set $url manual.
             'url' => $this->url,
             'sumber' => $this->sumber,
             'tipe' => 'jadwal',
