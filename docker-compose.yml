@@ -1,0 +1,72 @@
+services:
+  sikursus-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sikursus-app
+    restart: unless-stopped
+    depends_on:
+      sikursus-db:
+        condition: service_healthy
+    environment:
+      APP_NAME: "Si Kursus"
+      APP_ENV: ${APP_ENV:-local}
+      APP_DEBUG: ${APP_DEBUG:-true}
+      APP_URL: ${APP_URL:-https://sikursus.ihsannurk.web.id}
+      APP_KEY: ${APP_KEY:-}
+      LOG_CHANNEL: stack
+      LOG_LEVEL: debug
+      DB_CONNECTION: mysql
+      DB_HOST: sikursus-db
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SESSION_DRIVER: file
+      CACHE_STORE: file
+      QUEUE_CONNECTION: sync
+      TRUSTED_PROXIES: "*"
+    volumes:
+      - sikursus_storage:/var/www/html/storage/app
+      - sikursus_public_uploads:/var/www/html/public/uploads
+    networks:
+      - sikursus_net
+
+  sikursus-db:
+    image: mysql:8.0
+    container_name: sikursus-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - sikursus_dbdata:/var/lib/mysql
+    networks:
+      - sikursus_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  sikursus-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: sikursus-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    depends_on:
+      - sikursus-app
+    networks:
+      - sikursus_net
+
+volumes:
+  sikursus_dbdata:
+  sikursus_storage:
+  sikursus_public_uploads:
+
+networks:
+  sikursus_net:
+    driver: bridge
+    name: sikursus_net

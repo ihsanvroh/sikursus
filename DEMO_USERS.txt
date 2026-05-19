@@ -1,0 +1,120 @@
+══════════════════════════════════════════════════════════════
+  AKUN DEMO — SISTEM INFORMASI KURSUS
+  Disiapkan untuk presentasi & uji coba
+══════════════════════════════════════════════════════════════
+
+
+┌──────────────────────────────────────────────────────────────┐
+│  APP 1 : KURSUS (PMB / Pendaftaran Calon Peserta)            │
+│  URL   : https://kursus.ihsannurk.web.id                     │
+│  Stack : Laravel 8 + MySQL 8                                 │
+└──────────────────────────────────────────────────────────────┘
+
+[ ADMINISTRATOR ]
+  Email     : admin@gmail.com
+  Password  : kursus123
+  Akses     : Full admin — kelola pendaftaran, kursus, peserta
+
+  Email     : admin2@gmail.com
+  Password  : kursus123
+  Akses     : Admin sekunder (cadangan)
+
+[ CALON PESERTA ]
+  Email     : user@gmail.com
+  Password  : kursus123
+  Nama      : Iam User
+
+  Email     : abiihutabarat29@gmail.com
+  Password  : kursus123
+  Nama      : Abii Hutabarat
+
+  Email     : jasminemutiara@gmail.com
+  Password  : kursus123
+  Nama      : Jasmine Mutiara Bintang
+
+
+┌──────────────────────────────────────────────────────────────┐
+│  APP 2 : SIKURSUS (SPP Bulanan + Multi-Role + Pengingat)     │
+│  URL   : https://sikursus.ihsannurk.web.id                   │
+│  Stack : Laravel 11 + PHP 8.4 + MySQL 8                      │
+└──────────────────────────────────────────────────────────────┘
+
+[ ADMIN ]
+  Email     : admin@sikursus.local
+  Password  : admin12345
+  Akses     : Full system — kelola siswa, kelas, tagihan,
+              pembayaran, laporan, template pengingat,
+              setting H-N, scheduler
+
+[ GURU ]  (password sama: guru12345)
+  Email     : guru.baca@sikursus.local
+  Nama      : Bu Sari
+  Kelas     : Les Baca Pemula (BACA-1)  — Rp 150.000
+
+  Email     : guru.hitung@sikursus.local
+  Nama      : Pak Adi
+  Kelas     : Les Berhitung Dasar (HITUNG-1) — Rp 175.000
+
+  Email     : guru.bahasa@sikursus.local
+  Nama      : Ms Linda
+  Kelas     : Les Bahasa Inggris Anak (BING-1) — Rp 200.000
+
+[ SISWA ]  (password sama: siswa12345)
+  Email     : andi@siswa.local      — Andi Pratama (L)
+              Enrolled: BACA-1, HITUNG-1
+
+  Email     : budi@siswa.local      — Budi Santoso (L)
+              Enrolled: BACA-1
+
+  Email     : citra@siswa.local     — Citra Dewi (P)
+              Enrolled: BING-1
+
+  Email     : dini@siswa.local      — Dini Anggraini (P)
+              Enrolled: HITUNG-1, BING-1
+
+  Email     : eko@siswa.local       — Eko Saputra (L)
+              Enrolled: BACA-1
+
+
+══════════════════════════════════════════════════════════════
+  DATA AWAL DI SIKURSUS (sudah ke-seed)
+══════════════════════════════════════════════════════════════
+
+  • 3 Kelas aktif dengan tarif berbeda
+  • 7 Enrollment aktif (siswa ↔ kelas)
+  • 7 Tagihan otomatis untuk periode bulan ini, jatuh tempo
+    tanggal 10, status BELUM_BAYAR
+  • 3 Template pengingat siap pakai:
+      - H-3 sebelum jatuh tempo
+      - H-0 (jatuh tempo hari ini)
+      - H+7 (lewat jatuh tempo)
+
+
+══════════════════════════════════════════════════════════════
+  ALUR DEMO YANG DISARANKAN (SIKURSUS)
+══════════════════════════════════════════════════════════════
+
+  1. Login Admin → Dashboard, lihat ringkasan
+  2. Menu Siswa → tambah siswa baru
+  3. Menu Kelas → lihat 3 kelas + tarif
+  4. Menu Enrollment → daftarkan siswa baru ke kelas
+  5. Menu Tagihan → klik "Generate Tagihan Bulan Ini"
+  6. Menu Pembayaran → input pembayaran tagihan
+  7. Menu Laporan → cek rekap bulanan
+  8. Menu Pengingat → kirim manual atau set scheduler
+  9. Logout, login sebagai Guru → lihat kelas yang diampu
+ 10. Logout, login sebagai Siswa → lihat tagihan & notif
+
+
+══════════════════════════════════════════════════════════════
+  CATATAN
+══════════════════════════════════════════════════════════════
+
+  • Semua password di atas adalah default demo, ganti
+    sebelum production.
+  • Email gak harus valid (cuma identifier login).
+  • Notifikasi sistem in-app (icon lonceng di header).
+  • Generate tagihan bulanan = manual via tombol di menu
+    Tagihan, bukan auto cron.
+
+══════════════════════════════════════════════════════════════

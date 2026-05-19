@@ -1,0 +1,45 @@
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Laravel runtime (di-generate di container)
+overlay/storage/*.key
+overlay/storage/logs/*
+overlay/storage/framework/cache/*
+overlay/storage/framework/sessions/*
+overlay/storage/framework/views/*
+overlay/storage/framework/testing/*
+overlay/bootstrap/cache/*.php
+overlay/vendor/
+overlay/node_modules/
+overlay/public/hot
+overlay/public/storage
+overlay/public/build/
+
+# Composer / Node
+composer.lock
+package-lock.json
+yarn.lock
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Docker runtime
+docker-compose.override.yml
+
+# Backup
+*.bak
+*.backup
+*.old
