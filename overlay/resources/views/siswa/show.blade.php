@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title','Detail Siswa: '.$siswa->name)
 @section('content')
+<div class="mb-3">@include('partials._back', ['route' => route('siswa.index')])</div>
 <div class="row g-3">
   <div class="col-md-4">
     <div class="card card-stat">

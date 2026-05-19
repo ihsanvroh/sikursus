@@ -55,6 +55,7 @@
     @endforelse
     </tbody>
   </table>
-  {{ $tagihan->links() }}
+  {{-- pagination --}}
+  @include('partials._pagination', ['paginator' => $tagihan])
 </div></div>
 @endsection

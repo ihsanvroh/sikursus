@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', $kelas->exists ? 'Edit Kelas' : 'Tambah Kelas')
 @section('content')
+<div class="mb-3">@include('partials._back', ['route' => route('kelas.index')])</div>
 <div class="card card-stat" style="max-width:720px;">
   <div class="card-body">
     <form method="POST" action="{{ $kelas->exists ? route('kelas.update',$kelas) : route('kelas.store') }}">

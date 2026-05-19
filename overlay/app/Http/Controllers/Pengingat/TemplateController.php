@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Pengingat;
 use App\Http\Controllers\Controller;
 use App\Models\PengingatTemplate;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Concerns\PerPage;
 
 class TemplateController extends Controller {
+    use PerPage;
+
     public function index() {
-        $template = PengingatTemplate::orderBy('nama')->paginate(20);
+        $template = PengingatTemplate::orderBy('nama')->paginate($this->perPage(20))->withQueryString();
         return view('pengingat.template.index', compact('template'));
     }
     public function create() { return view('pengingat.template.form', ['t' => new PengingatTemplate(['aktif'=>true])]); }

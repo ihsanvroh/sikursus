@@ -35,6 +35,6 @@
     @endforelse
     </tbody>
   </table>
-  {{ $logs->links() }}
+  @include('partials._pagination', ['paginator' => $logs])
 </div></div>
 @endsection

@@ -44,7 +44,8 @@
         </tbody>
       </table>
     </div>
-    {{ $siswa->links() }}
+    {{-- pagination --}}
+    @include('partials._pagination', ['paginator' => $siswa])
   </div>
 </div>
 @endsection

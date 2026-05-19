@@ -7,8 +7,11 @@ use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Http\Controllers\Concerns\PerPage;
 
 class SiswaController extends Controller {
+    use PerPage;
+
     public function index(Request $request) {
         $q = User::where('role','siswa');
         if ($request->filled('q')) {
@@ -20,7 +23,7 @@ class SiswaController extends Controller {
             $q->whereHas('enrollments', fn($e) => $e->where('kelas_id',$kid)->where('status','aktif'));
         }
         $siswa = $q->withCount(['enrollments as enrollments_aktif' => fn($e) => $e->where('status','aktif')])
-                   ->orderBy('name')->paginate(20)->withQueryString();
+                   ->orderBy('name')->paginate($this->perPage(20))->withQueryString();
         $kelas = Kelas::where('aktif',true)->orderBy('nama')->get();
         return view('siswa.index', compact('siswa','kelas'));
     }

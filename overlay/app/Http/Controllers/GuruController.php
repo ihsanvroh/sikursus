@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Concerns\PerPage;
 
 class GuruController extends Controller {
+    use PerPage;
+
     public function index() {
-        $guru = User::where('role','guru')->withCount('kelasDiampu')->orderBy('name')->paginate(20);
+        $guru = User::where('role','guru')->withCount('kelasDiampu')->orderBy('name')->paginate($this->perPage(20))->withQueryString();
         return view('guru.index', compact('guru'));
     }
 

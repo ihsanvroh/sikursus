@@ -28,6 +28,6 @@
     @endforelse
     </tbody>
   </table>
-  {{ $template->links() }}
+  @include('partials._pagination', ['paginator' => $template])
 </div></div>
 @endsection

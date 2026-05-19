@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Concerns\PerPage;
 
 class KelasController extends Controller {
+    use PerPage;
+
     public function index() {
-        $kelas = Kelas::with('guru')->withCount(['siswaAktif as siswa_aktif_count'])->orderBy('nama')->paginate(20);
+        $kelas = Kelas::with('guru')->withCount(['siswaAktif as siswa_aktif_count'])->orderBy('nama')->paginate($this->perPage(20))->withQueryString();
         return view('kelas.index', compact('kelas'));
     }
 

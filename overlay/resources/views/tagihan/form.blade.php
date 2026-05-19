@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title','Buat Tagihan Manual')
 @section('content')
+<div class="mb-3">@include('partials._back', ['route' => route('tagihan.index')])</div>
 <div class="card card-stat" style="max-width:720px;"><div class="card-body">
   <form method="POST" action="{{ route('tagihan.store') }}">@csrf
     <div class="row g-3">

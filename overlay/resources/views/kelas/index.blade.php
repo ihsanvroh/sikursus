@@ -29,7 +29,7 @@
       @endforelse
       </tbody>
     </table>
-    {{ $kelas->links() }}
+    @include('partials._pagination', ['paginator' => $kelas])
   </div>
 </div>
 @endsection

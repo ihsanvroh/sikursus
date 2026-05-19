@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', $t->exists ? 'Edit Template' : 'Tambah Template')
 @section('content')
+<div class="mb-3">@include('partials._back', ['route' => route('pengingat.template.index')])</div>
 <div class="card card-stat" style="max-width:760px;"><div class="card-body">
   <form method="POST" action="{{ $t->exists ? route('pengingat.template.update',$t) : route('pengingat.template.store') }}">
     @csrf @if($t->exists) @method('PUT') @endif

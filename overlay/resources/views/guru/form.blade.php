@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', $guru->exists ? 'Edit Guru' : 'Tambah Guru')
 @section('content')
+<div class="mb-3">@include('partials._back', ['route' => route('guru.index')])</div>
 <div class="card card-stat" style="max-width:600px;"><div class="card-body">
   <form method="POST" action="{{ $guru->exists ? route('guru.update',$guru) : route('guru.store') }}">
     @csrf @if($guru->exists) @method('PUT') @endif

@@ -23,6 +23,6 @@
     @endforelse
     </tbody>
   </table>
-  {{ $guru->links() }}
+  @include('partials._pagination', ['paginator' => $guru])
 </div></div>
 @endsection

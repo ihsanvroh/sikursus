@@ -7,8 +7,11 @@ use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Http\Controllers\Concerns\PerPage;
 
 class TagihanController extends Controller {
+    use PerPage;
+
     public function index(Request $request) {
         $q = Tagihan::with(['siswa','kelas']);
         if ($request->filled('status')) $q->where('status', $request->status);
@@ -17,7 +20,7 @@ class TagihanController extends Controller {
             $kw = $request->q;
             $q->whereHas('siswa', fn($s) => $s->where('name','like',"%$kw%"));
         }
-        $tagihan = $q->orderByDesc('periode')->orderBy('jatuh_tempo')->paginate(25)->withQueryString();
+        $tagihan = $q->orderByDesc('periode')->orderBy('jatuh_tempo')->paginate($this->perPage(25))->withQueryString();
         $periodes = Tagihan::select('periode')->distinct()->orderByDesc('periode')->pluck('periode');
         return view('tagihan.index', compact('tagihan','periodes'));
     }

@@ -28,6 +28,6 @@
   @empty
     <div class="text-center text-muted py-4"><i class="bi bi-bell-slash display-4 d-block mb-2"></i>Belum ada notifikasi</div>
   @endforelse
-  {{ $notif->links() }}
+  @include('partials._pagination', ['paginator' => $notif])
 </div></div>
 @endsection

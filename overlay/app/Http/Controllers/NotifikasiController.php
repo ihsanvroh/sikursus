@@ -2,10 +2,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Concerns\PerPage;
 
 class NotifikasiController extends Controller {
+    use PerPage;
+
     public function index(Request $r) {
-        $notif = $r->user()->notifications()->paginate(20);
+        $notif = $r->user()->notifications()->paginate($this->perPage(20))->withQueryString();
         return view('notifikasi.index', compact('notif'));
     }
     public function markRead(Request $r, string $id) {
