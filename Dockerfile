@@ -19,6 +19,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN a2enmod rewrite headers
 
+# Enable OPcache + tuning untuk production (turunkan latensi 30-60%)
+RUN docker-php-ext-install opcache \
+ && { \
+      echo 'opcache.enable=1'; \
+      echo 'opcache.enable_cli=0'; \
+      echo 'opcache.memory_consumption=192'; \
+      echo 'opcache.interned_strings_buffer=16'; \
+      echo 'opcache.max_accelerated_files=20000'; \
+      echo 'opcache.validate_timestamps=1'; \
+      echo 'opcache.revalidate_freq=2'; \
+      echo 'opcache.fast_shutdown=1'; \
+      echo 'opcache.jit_buffer_size=64M'; \
+      echo 'opcache.jit=tracing'; \
+      echo 'realpath_cache_size=4096K'; \
+      echo 'realpath_cache_ttl=600'; \
+    } > /usr/local/etc/php/conf.d/opcache.ini \
+ && { \
+      echo 'memory_limit=256M'; \
+      echo 'upload_max_filesize=20M'; \
+      echo 'post_max_size=20M'; \
+      echo 'max_execution_time=60'; \
+    } > /usr/local/etc/php/conf.d/zz-app.ini
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Apache docroot to public/
