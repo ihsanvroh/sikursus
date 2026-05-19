@@ -7,7 +7,8 @@
       <h6 class="mb-0 align-self-center">Daftar Kelas</h6>
       <a href="{{ route('kelas.create') }}" class="btn btn-success ms-auto"><i class="bi bi-plus-lg"></i> Tambah Kelas</a>
     </div>
-    <table class="table align-middle">
+    <div class="table-responsive">
+    <table class="table align-middle text-nowrap">
       <thead><tr><th>Kode</th><th>Nama</th><th>Guru</th><th>Tarif</th><th>Siswa Aktif</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
       <tbody>
       @forelse($kelas as $k)
@@ -29,6 +30,7 @@
       @endforelse
       </tbody>
     </table>
+    </div>
     @include('partials._pagination', ['paginator' => $kelas])
   </div>
 </div>

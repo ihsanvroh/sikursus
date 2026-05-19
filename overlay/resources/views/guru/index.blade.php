@@ -3,7 +3,8 @@
 @section('content')
 <div class="card card-stat"><div class="card-body">
   <div class="d-flex mb-3"><h6 class="mb-0 align-self-center">Daftar Guru</h6><a href="{{ route('guru.create') }}" class="btn btn-success ms-auto"><i class="bi bi-plus-lg"></i> Tambah Guru</a></div>
-  <table class="table align-middle">
+  <div class="table-responsive">
+  <table class="table align-middle text-nowrap">
     <thead><tr><th>Nama</th><th>Email</th><th>No HP</th><th>Kelas Diampu</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
     <tbody>
     @forelse($guru as $g)
@@ -23,6 +24,7 @@
     @endforelse
     </tbody>
   </table>
+  </div>
   @include('partials._pagination', ['paginator' => $guru])
 </div></div>
 @endsection

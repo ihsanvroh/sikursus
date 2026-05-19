@@ -9,8 +9,9 @@
     <code>{nama}</code> <code>{kelas}</code> <code>{periode}</code> <code>{nominal}</code> <code>{jatuh_tempo}</code> <code>{sisa}</code>
   </div>
 
-  <table class="table align-middle">
-    <thead><tr><th>Nama</th><th>Judul</th><th>Body</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
+  <div class="table-responsive">
+  <table class="table align-middle text-nowrap">
+    <thead><tr><th>Nama Template</th><th>Judul</th><th>Body</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
     <tbody>
     @forelse($template as $t)
       <tr>
@@ -28,6 +29,7 @@
     @endforelse
     </tbody>
   </table>
+  </div>
   @include('partials._pagination', ['paginator' => $template])
 </div></div>
 @endsection

@@ -32,7 +32,8 @@
     @if(request()->hasAny(['q','status','periode']))<a href="{{ route('tagihan.index') }}" class="btn btn-outline-secondary">Reset</a>@endif
   </form>
 
-  <table class="table align-middle">
+  <div class="table-responsive">
+  <table class="table align-middle text-nowrap">
     <thead><tr><th>Periode</th><th>Siswa</th><th>Kelas</th><th>Nominal</th><th>Terbayar</th><th>Sisa</th><th>Jatuh Tempo</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
     <tbody>
     @forelse($tagihan as $t)
@@ -55,6 +56,7 @@
     @endforelse
     </tbody>
   </table>
+  </div>
   {{-- pagination --}}
   @include('partials._pagination', ['paginator' => $tagihan])
 </div></div>

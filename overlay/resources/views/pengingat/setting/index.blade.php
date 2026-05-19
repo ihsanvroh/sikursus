@@ -25,7 +25,8 @@
 
 <div class="card card-stat"><div class="card-body">
   <h6>Daftar Aturan</h6>
-  <table class="table align-middle">
+  <div class="table-responsive">
+  <table class="table align-middle text-nowrap">
     <thead><tr><th>Trigger</th><th>Template</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
     <tbody>
     @forelse($settings as $s)
@@ -61,6 +62,7 @@
     @endforelse
     </tbody>
   </table>
+  </div>
   <div class="alert alert-light small mt-3">
     <i class="bi bi-info-circle"></i> Pengingat otomatis dikirim setiap hari jam 08:00 berdasarkan aturan aktif. Untuk testing manual jalankan: <code>php artisan pengingat:auto --dry-run</code>
   </div>

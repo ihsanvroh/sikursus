@@ -18,7 +18,8 @@
     @if(request()->hasAny(['q','mode','status']))<a href="{{ route('pengingat.log.index') }}" class="btn btn-outline-secondary">Reset</a>@endif
   </form>
 
-  <table class="table align-middle">
+  <div class="table-responsive">
+  <table class="table align-middle text-nowrap">
     <thead><tr><th>Waktu</th><th>Siswa</th><th>Tagihan</th><th>Mode</th><th>Judul</th><th>Status</th></tr></thead>
     <tbody>
     @forelse($logs as $l)
@@ -35,6 +36,7 @@
     @endforelse
     </tbody>
   </table>
+  </div>
   @include('partials._pagination', ['paginator' => $logs])
 </div></div>
 @endsection

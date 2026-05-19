@@ -20,7 +20,8 @@
   <div class="col-md-6">
     <div class="card card-stat"><div class="card-body">
       <h6>Per Hari</h6>
-      <table class="table table-sm">
+      <div class="table-responsive">
+      <table class="table table-sm text-nowrap">
         <thead><tr><th>Tanggal</th><th class="text-end">Tx</th><th class="text-end">Total</th></tr></thead>
         <tbody>
           @forelse($perHari as $tgl => $d)
@@ -30,12 +31,14 @@
           @endforelse
         </tbody>
       </table>
+      </div>
     </div></div>
   </div>
   <div class="col-md-6">
     <div class="card card-stat"><div class="card-body">
       <h6>Per Kelas</h6>
-      <table class="table table-sm">
+      <div class="table-responsive">
+      <table class="table table-sm text-nowrap">
         <thead><tr><th>Kelas</th><th class="text-end">Tx</th><th class="text-end">Total</th></tr></thead>
         <tbody>
           @forelse($perKelas as $nama => $d)
@@ -45,13 +48,15 @@
           @endforelse
         </tbody>
       </table>
+      </div>
     </div></div>
   </div>
 </div>
 
 <div class="card card-stat mt-3"><div class="card-body">
   <h6>Detail Pembayaran</h6>
-  <table class="table table-sm">
+  <div class="table-responsive">
+  <table class="table table-sm text-nowrap">
     <thead><tr><th>Tanggal</th><th>Siswa</th><th>Kelas</th><th>Periode</th><th>Nominal</th><th>Metode</th><th>Admin</th></tr></thead>
     <tbody>
       @forelse($bayar as $p)
@@ -69,12 +74,14 @@
       @endforelse
     </tbody>
   </table>
+  </div>
 </div></div>
 
 @if($outstanding->count() > 0)
 <div class="card card-stat mt-3"><div class="card-body">
   <h6>Tagihan Belum Lunas Periode {{ $bulan }}</h6>
-  <table class="table table-sm">
+  <div class="table-responsive">
+  <table class="table table-sm text-nowrap">
     <thead><tr><th>Siswa</th><th>Kelas</th><th>Nominal</th><th>Terbayar</th><th>Sisa</th><th>Jatuh Tempo</th></tr></thead>
     <tbody>
       @foreach($outstanding as $t)
@@ -89,6 +96,7 @@
       @endforeach
     </tbody>
   </table>
+  </div>
 </div></div>
 @endif
 @endsection
