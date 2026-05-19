@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
 <title>@yield('title','Si Kursus') · Si Kursus</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
 <style>
   :root { --sb-w: 240px; --sb-w-mini: 64px; }
   body { background:#f5f7fb; }
@@ -236,7 +236,7 @@
   @yield('content')
 @endauth
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
 <script>
 (function(){
   const sb = document.getElementById('appSidebar');
