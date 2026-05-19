@@ -9,13 +9,20 @@
     </div>
     <div class="table-responsive">
     <table class="table align-middle text-nowrap">
-      <thead><tr><th>Kode</th><th>Nama</th><th>Guru</th><th>Tarif</th><th>Siswa Aktif</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
+      <thead><tr><th>Kode</th><th>Nama</th><th>Guru</th><th>Jadwal</th><th>Tarif</th><th>Siswa</th><th>Status</th><th class="text-end">Aksi</th></tr></thead>
       <tbody>
       @forelse($kelas as $k)
         <tr>
           <td><code>{{ $k->kode }}</code></td>
           <td><strong>{{ $k->nama }}</strong>@if($k->deskripsi)<br><small class="text-muted">{{ $k->deskripsi }}</small>@endif</td>
           <td>{{ $k->guru->name ?? '-' }}</td>
+          <td>
+            @forelse($k->jadwal as $j)
+              <span class="badge bg-light text-dark border me-1">{{ $j->label() }}</span>
+            @empty
+              <small class="text-muted fst-italic">-</small>
+            @endforelse
+          </td>
           <td>Rp {{ number_format($k->tarif,0,',','.') }}</td>
           <td><span class="badge bg-info">{{ $k->siswa_aktif_count }}</span></td>
           <td>@if($k->aktif)<span class="badge bg-success">Aktif</span>@else<span class="badge bg-secondary">Non-aktif</span>@endif</td>
@@ -26,7 +33,7 @@
           </td>
         </tr>
       @empty
-        <tr><td colspan="7" class="text-center text-muted py-3">Belum ada kelas</td></tr>
+        <tr><td colspan="8" class="text-center text-muted py-3">Belum ada kelas</td></tr>
       @endforelse
       </tbody>
     </table>

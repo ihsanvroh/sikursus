@@ -15,4 +15,44 @@
     <div class="mt-3"><button class="btn btn-primary">Simpan</button> <a href="{{ route('guru.index') }}" class="btn btn-light">Batal</a></div>
   </form>
 </div></div>
+
+@if($guru->exists)
+  @php
+    $kelasDipegang = \App\Models\Kelas::with(['jadwal'])->where('guru_id', $guru->id)->orderBy('nama')->get();
+  @endphp
+  <div class="card card-stat mt-3" style="max-width:860px;"><div class="card-body">
+    <h6 class="mb-3"><i class="bi bi-easel"></i> Kelas yang Dipegang
+      <span class="badge bg-info ms-1">{{ $kelasDipegang->count() }}</span>
+    </h6>
+    @if($kelasDipegang->isEmpty())
+      <div class="alert alert-light small mb-0">
+        Belum ada kelas. Buka <a href="{{ route('kelas.create') }}">Tambah Kelas</a> dan pilih guru ini sebagai penanggung jawab.
+      </div>
+    @else
+      <div class="table-responsive">
+        <table class="table table-sm align-middle text-nowrap">
+          <thead><tr><th>Kode</th><th>Nama Kelas</th><th>Jadwal</th><th>Tarif</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+          @foreach($kelasDipegang as $k)
+            <tr>
+              <td><code>{{ $k->kode }}</code></td>
+              <td>{{ $k->nama }}</td>
+              <td>
+                @forelse($k->jadwal as $j)
+                  <span class="badge bg-light text-dark border me-1">{{ $j->label() }}</span>
+                @empty
+                  <small class="text-muted fst-italic">-</small>
+                @endforelse
+              </td>
+              <td>Rp {{ number_format($k->tarif,0,',','.') }}</td>
+              <td>@if($k->aktif)<span class="badge bg-success">Aktif</span>@else<span class="badge bg-secondary">Non</span>@endif</td>
+              <td><a href="{{ route('kelas.show',$k) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td>
+            </tr>
+          @endforeach
+          </tbody>
+        </table>
+      </div>
+    @endif
+  </div></div>
+@endif
 @endsection

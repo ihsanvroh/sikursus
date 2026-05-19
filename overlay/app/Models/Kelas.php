@@ -28,4 +28,9 @@ class Kelas extends Model {
     public function siswaAktif(): BelongsToMany {
         return $this->siswa()->wherePivot('status', 'aktif');
     }
+
+    public function jadwal(): HasMany {
+        return $this->hasMany(JadwalKelas::class, 'kelas_id')
+            ->orderBy('hari')->orderBy('jam_mulai');
+    }
 }

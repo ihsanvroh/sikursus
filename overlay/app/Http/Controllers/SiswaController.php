@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use App\Http\Controllers\Concerns\PerPage;
+use App\Services\JadwalConflictChecker;
 
 class SiswaController extends Controller {
     use PerPage;
@@ -91,7 +92,7 @@ class SiswaController extends Controller {
     }
 
     // Enrollment management
-    public function tambahKelas(Request $request, User $siswa) {
+    public function tambahKelas(Request $request, User $siswa, JadwalConflictChecker $checker) {
         abort_unless($siswa->role === 'siswa', 404);
         $data = $request->validate([
             'kelas_id' => 'required|exists:kelas,id',
@@ -100,6 +101,13 @@ class SiswaController extends Controller {
         ]);
         $exists = Enrollment::where('siswa_id',$siswa->id)->where('kelas_id',$data['kelas_id'])->where('status','aktif')->exists();
         if ($exists) return back()->with('error','Siswa sudah terdaftar aktif di kelas ini.');
+
+        // Cek bentrok jadwal
+        $conflicts = $checker->cekSiswa($siswa->id, (int)$data['kelas_id']);
+        if (!empty($conflicts)) {
+            return back()->with('error', 'Tidak bisa enroll: ' . $checker->formatPesanSiswa($conflicts));
+        }
+
         Enrollment::create([
             'siswa_id' => $siswa->id,
             'kelas_id' => $data['kelas_id'],
@@ -110,7 +118,7 @@ class SiswaController extends Controller {
         return back()->with('success','Siswa ditambahkan ke kelas.');
     }
 
-    public function gantiKelas(Request $request, Enrollment $enrollment) {
+    public function gantiKelas(Request $request, Enrollment $enrollment, JadwalConflictChecker $checker) {
         $data = $request->validate([
             'kelas_baru_id' => 'required|exists:kelas,id',
             'tgl_pindah' => 'nullable|date',
@@ -119,6 +127,15 @@ class SiswaController extends Controller {
         if ($enrollment->kelas_id == $data['kelas_baru_id']) {
             return back()->with('error','Kelas baru sama dengan kelas saat ini.');
         }
+
+        // Cek bentrok kelas baru vs kelas lain yang masih aktif (selain kelas yang akan diganti)
+        $conflicts = $checker->cekSiswa($enrollment->siswa_id, (int)$data['kelas_baru_id']);
+        // Filter: drop conflict yang berasal dari enrollment ini sendiri (karena akan di-tutup)
+        $conflicts = array_filter($conflicts, fn($c) => $c['kelas_lama']->id !== $enrollment->kelas_id);
+        if (!empty($conflicts)) {
+            return back()->with('error', 'Tidak bisa pindah kelas: ' . $checker->formatPesanSiswa(array_values($conflicts)));
+        }
+
         $tgl = $data['tgl_pindah'] ?? now()->toDateString();
         $enrollment->update(['status'=>'berhenti','tgl_selesai'=>$tgl,'catatan'=>($enrollment->catatan ?? '') . "\n[Pindah ke kelas lain pada $tgl]"]);
         Enrollment::create([

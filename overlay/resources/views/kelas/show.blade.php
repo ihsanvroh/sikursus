@@ -14,6 +14,17 @@
           <tr><th>Status</th><td>@if($kelas->aktif)<span class="badge bg-success">Aktif</span>@else<span class="badge bg-secondary">Non-aktif</span>@endif</td></tr>
         </table>
         @if($kelas->deskripsi)<div class="alert alert-light small">{{ $kelas->deskripsi }}</div>@endif
+
+        <h6 class="mt-3 mb-2"><i class="bi bi-calendar-week"></i> Jadwal Rutin</h6>
+        @if($kelas->jadwal->isEmpty())
+          <div class="text-muted small fst-italic">Belum ada jadwal. Edit kelas untuk menambahkan slot.</div>
+        @else
+          <ul class="list-unstyled mb-0">
+            @foreach($kelas->jadwal as $j)
+              <li><i class="bi bi-clock me-1 text-primary"></i>{{ $j->label() }}</li>
+            @endforeach
+          </ul>
+        @endif
       </div>
     </div>
   </div>

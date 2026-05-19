@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Enrollment;
 use App\Models\Tagihan;
+use App\Models\JadwalKelas;
 use App\Models\PengingatTemplate;
 use App\Models\PengingatSetting;
 use Illuminate\Database\Seeder;
@@ -53,6 +54,14 @@ class DatabaseSeeder extends Seeder {
         $kls1 = Kelas::create(['nama' => 'Les Baca Pemula', 'kode' => 'BACA-1', 'tarif' => 150000, 'guru_id' => $guruBaca->id, 'deskripsi' => 'Mengenal huruf, suku kata, kalimat sederhana', 'aktif' => true]);
         $kls2 = Kelas::create(['nama' => 'Les Berhitung Dasar', 'kode' => 'HITUNG-1', 'tarif' => 175000, 'guru_id' => $guruHitung->id, 'deskripsi' => 'Penjumlahan, pengurangan, perkalian, pembagian', 'aktif' => true]);
         $kls3 = Kelas::create(['nama' => 'Les Bahasa Inggris Anak', 'kode' => 'BING-1', 'tarif' => 200000, 'guru_id' => $guruBahasa->id, 'deskripsi' => 'Vocabulary, basic conversation', 'aktif' => true]);
+
+        // Jadwal Kelas (Senin/Rabu/Jumat — slot 60 menit)
+        JadwalKelas::create(['kelas_id'=>$kls1->id, 'hari'=>1, 'jam_mulai'=>'14:00:00', 'jam_selesai'=>'15:00:00', 'aktif'=>true]); // Senin
+        JadwalKelas::create(['kelas_id'=>$kls1->id, 'hari'=>3, 'jam_mulai'=>'14:00:00', 'jam_selesai'=>'15:00:00', 'aktif'=>true]); // Rabu
+        JadwalKelas::create(['kelas_id'=>$kls2->id, 'hari'=>2, 'jam_mulai'=>'15:30:00', 'jam_selesai'=>'16:30:00', 'aktif'=>true]); // Selasa
+        JadwalKelas::create(['kelas_id'=>$kls2->id, 'hari'=>4, 'jam_mulai'=>'15:30:00', 'jam_selesai'=>'16:30:00', 'aktif'=>true]); // Kamis
+        JadwalKelas::create(['kelas_id'=>$kls3->id, 'hari'=>3, 'jam_mulai'=>'16:00:00', 'jam_selesai'=>'17:00:00', 'aktif'=>true]); // Rabu (gak bentrok dgn BACA-1 jam 14:00)
+        JadwalKelas::create(['kelas_id'=>$kls3->id, 'hari'=>5, 'jam_mulai'=>'16:00:00', 'jam_selesai'=>'17:00:00', 'aktif'=>true]); // Jumat
 
         // Siswa
         $siswaData = [
