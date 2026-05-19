@@ -38,7 +38,11 @@ COPY --from=builder /app /var/www/html
 COPY overlay/ /var/www/html/
 
 # Run composer install for any new package needs (none atm) and dump autoload
-RUN composer dump-autoload --optimize --no-interaction
+RUN composer require \
+      barryvdh/laravel-dompdf:^3.0 \
+      phpoffice/phpspreadsheet:^2.3 \
+      --no-interaction --no-scripts \
+ && composer dump-autoload --optimize --no-interaction
 
 RUN chown -R www-data:www-data /var/www/html \
  && chmod -R 775 storage bootstrap/cache

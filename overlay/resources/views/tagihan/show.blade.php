@@ -1,7 +1,12 @@
 @extends('layouts.app')
 @section('title','Detail Tagihan')
 @section('content')
-<div class="mb-3">@include('partials._back', ['route' => route('tagihan.index')])</div>
+<div class="mb-3 d-flex gap-2 flex-wrap">
+  @include('partials._back', ['route' => route('tagihan.index')])
+  <a href="{{ route('tagihan.pdf', $tagihan) }}" class="btn btn-outline-danger btn-sm" target="_blank">
+    <i class="bi bi-file-earmark-pdf"></i> Download PDF
+  </a>
+</div>
 <div class="row g-3">
   <div class="col-md-5">
     <div class="card card-stat"><div class="card-body">

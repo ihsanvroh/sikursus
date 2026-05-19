@@ -14,22 +14,46 @@
 </div></div>
 
 <div class="card card-stat"><div class="card-body">
-  <form method="GET" class="d-flex gap-2 flex-wrap mb-3">
-    <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Cari nama siswa" style="max-width:240px;">
-    <select name="status" class="form-select" style="max-width:180px;">
-      <option value="">Semua Status</option>
-      <option value="belum_bayar" @selected(request('status')=='belum_bayar')>Belum Bayar</option>
-      <option value="sebagian" @selected(request('status')=='sebagian')>Sebagian</option>
-      <option value="lunas" @selected(request('status')=='lunas')>Lunas</option>
-    </select>
-    <select name="periode" class="form-select" style="max-width:160px;">
-      <option value="">Semua Periode</option>
-      @foreach($periodes as $p)
-        <option value="{{ $p }}" @selected(request('periode')==$p)>{{ $p }}</option>
-      @endforeach
-    </select>
-    <button class="btn btn-primary"><i class="bi bi-funnel"></i> Filter</button>
-    @if(request()->hasAny(['q','status','periode']))<a href="{{ route('tagihan.index') }}" class="btn btn-outline-secondary">Reset</a>@endif
+  <form method="GET" class="row g-2 mb-3">
+    <div class="col-md-3 col-6">
+      <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Cari nama siswa">
+    </div>
+    <div class="col-md-2 col-6">
+      <select name="status" class="form-select">
+        <option value="">Semua Status</option>
+        <option value="belum_bayar" @selected(request('status')=='belum_bayar')>Belum Bayar</option>
+        <option value="sebagian" @selected(request('status')=='sebagian')>Sebagian</option>
+        <option value="lunas" @selected(request('status')=='lunas')>Lunas</option>
+      </select>
+    </div>
+    <div class="col-md-2 col-6">
+      <select name="periode" class="form-select">
+        <option value="">Semua Periode</option>
+        @foreach($periodes as $p)
+          <option value="{{ $p }}" @selected(request('periode')==$p)>{{ $p }}</option>
+        @endforeach
+      </select>
+    </div>
+    <div class="col-md-2 col-6">
+      <select name="kelas_id" class="form-select">
+        <option value="">Semua Kelas</option>
+        @foreach(\App\Models\Kelas::orderBy('nama')->get() as $k)
+          <option value="{{ $k->id }}" @selected(request('kelas_id')==$k->id)>{{ $k->nama }}</option>
+        @endforeach
+      </select>
+    </div>
+    <div class="col-md-3 col-12 d-flex gap-2 flex-wrap">
+      <button class="btn btn-primary"><i class="bi bi-funnel"></i> Filter</button>
+      @if(request()->hasAny(['q','status','periode','siswa_id','kelas_id']))<a href="{{ route('tagihan.index') }}" class="btn btn-outline-secondary">Reset</a>@endif
+      <div class="ms-auto d-flex gap-1">
+        <a href="{{ route('tagihan.export.pdf', request()->query()) }}" class="btn btn-outline-danger btn-sm" target="_blank" title="Export PDF">
+          <i class="bi bi-file-earmark-pdf"></i>
+        </a>
+        <a href="{{ route('tagihan.export.excel', request()->query()) }}" class="btn btn-outline-success btn-sm" title="Export Excel">
+          <i class="bi bi-file-earmark-excel"></i>
+        </a>
+      </div>
+    </div>
   </form>
 
   <div class="table-responsive">
@@ -47,8 +71,9 @@
         <td>{{ $t->jatuh_tempo->format('d M Y') }}</td>
         <td><span class="badge-soft badge-{{ str_replace('_','-',$t->status) }}">{{ str_replace('_',' ',$t->status) }}</span></td>
         <td class="text-end">
-          <a href="{{ route('tagihan.show',$t) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
-          <form action="{{ route('tagihan.destroy',$t) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus tagihan?')">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+          <a href="{{ route('tagihan.show',$t) }}" class="btn btn-sm btn-outline-primary" title="Lihat"><i class="bi bi-eye"></i></a>
+          <a href="{{ route('tagihan.pdf',$t) }}" class="btn btn-sm btn-outline-danger" target="_blank" title="Download PDF"><i class="bi bi-file-earmark-pdf"></i></a>
+          <form action="{{ route('tagihan.destroy',$t) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus tagihan?')">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger" title="Hapus"><i class="bi bi-trash"></i></button></form>
         </td>
       </tr>
     @empty

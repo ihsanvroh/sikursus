@@ -7,6 +7,15 @@
     <div><label class="form-label small">Filter Harian</label><input type="date" name="tanggal" class="form-control" value="{{ $tanggal }}"></div>
     <button class="btn btn-primary"><i class="bi bi-funnel"></i> Tampilkan</button>
     @if($tanggal)<a href="?bulan={{ $bulan }}" class="btn btn-outline-secondary">Hapus filter harian</a>@endif
+
+    <div class="ms-auto d-flex gap-2">
+      <a href="{{ route('laporan.export.pdf', request()->query()) }}" class="btn btn-outline-danger" target="_blank">
+        <i class="bi bi-file-earmark-pdf"></i> PDF
+      </a>
+      <a href="{{ route('laporan.export.excel', request()->query()) }}" class="btn btn-outline-success">
+        <i class="bi bi-file-earmark-excel"></i> Excel
+      </a>
+    </div>
   </form>
 </div></div>
 

@@ -42,15 +42,20 @@ Route::middleware('auth')->group(function () {
 
         Route::get('tagihan', [TagihanController::class,'index'])->name('tagihan.index');
         Route::get('tagihan/create', [TagihanController::class,'create'])->name('tagihan.create');
+        Route::get('tagihan/export/pdf', [TagihanController::class,'exportPdf'])->name('tagihan.export.pdf');
+        Route::get('tagihan/export/excel', [TagihanController::class,'exportExcel'])->name('tagihan.export.excel');
         Route::post('tagihan', [TagihanController::class,'store'])->name('tagihan.store');
-        Route::get('tagihan/{tagihan}', [TagihanController::class,'show'])->name('tagihan.show');
-        Route::delete('tagihan/{tagihan}', [TagihanController::class,'destroy'])->name('tagihan.destroy');
         Route::post('tagihan/generate', [TagihanController::class,'generate'])->name('tagihan.generate');
+        Route::get('tagihan/{tagihan}', [TagihanController::class,'show'])->name('tagihan.show');
+        Route::get('tagihan/{tagihan}/pdf', [TagihanController::class,'downloadPdf'])->name('tagihan.pdf');
+        Route::delete('tagihan/{tagihan}', [TagihanController::class,'destroy'])->name('tagihan.destroy');
 
         Route::post('tagihan/{tagihan}/pembayaran', [PembayaranController::class,'store'])->name('pembayaran.store');
         Route::delete('pembayaran/{pembayaran}', [PembayaranController::class,'destroy'])->name('pembayaran.destroy');
 
         Route::get('laporan', [LaporanController::class,'index'])->name('laporan.index');
+        Route::get('laporan/export/pdf', [LaporanController::class,'exportPdf'])->name('laporan.export.pdf');
+        Route::get('laporan/export/excel', [LaporanController::class,'exportExcel'])->name('laporan.export.excel');
 
         // Pengingat
         Route::resource('pengingat/template', PgTemplateController::class)->names('pengingat.template')->parameters(['template' => 'template']);

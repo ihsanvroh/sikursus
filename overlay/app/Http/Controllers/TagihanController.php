@@ -8,21 +8,76 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Concerns\PerPage;
+use App\Services\ExcelExporter;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TagihanController extends Controller {
     use PerPage;
 
     public function index(Request $request) {
+        $q = $this->buildQuery($request);
+        $tagihan = $q->orderByDesc('periode')->orderBy('jatuh_tempo')->paginate($this->perPage(25))->withQueryString();
+        $periodes = Tagihan::select('periode')->distinct()->orderByDesc('periode')->pluck('periode');
+        return view('tagihan.index', compact('tagihan','periodes'));
+    }
+
+    public function exportPdf(Request $request) {
+        $tagihan = $this->buildQuery($request)->orderByDesc('periode')->orderBy('jatuh_tempo')->get();
+        $pdf = Pdf::loadView('tagihan.list-pdf', ['tagihan' => $tagihan, 'filters' => $this->filterLabels($request)])
+                  ->setPaper('A4', 'landscape');
+        return $pdf->download('tagihan-' . now()->format('Ymd-His') . '.pdf');
+    }
+
+    public function exportExcel(Request $request, ExcelExporter $excel) {
+        $tagihan = $this->buildQuery($request)->orderByDesc('periode')->orderBy('jatuh_tempo')->get();
+        $headers = ['Periode','Siswa','Kelas','Nominal','Terbayar','Sisa','Jatuh Tempo','Status'];
+        $rows = $tagihan->map(fn($t) => [
+            $t->periode,
+            $t->siswa->name ?? '-',
+            $t->kelas->nama ?? '-',
+            (int)$t->nominal,
+            (int)$t->terbayar,
+            (int)$t->sisaBayar(),
+            $t->jatuh_tempo->format('Y-m-d'),
+            str_replace('_',' ',$t->status),
+        ])->toArray();
+        return $excel->download('tagihan-' . now()->format('Ymd-His') . '.xlsx', $headers, $rows, 'Daftar Tagihan');
+    }
+
+    public function downloadPdf(Tagihan $tagihan) {
+        $tagihan->load(['siswa','kelas.guru','pembayaran']);
+        $pdf = Pdf::loadView('tagihan.pdf', compact('tagihan'))->setPaper('A4', 'portrait');
+        $filename = sprintf('tagihan-INV-%06d-%s.pdf', $tagihan->id, $tagihan->periode);
+        return $pdf->download($filename);
+    }
+
+    private function buildQuery(Request $request) {
         $q = Tagihan::with(['siswa','kelas']);
         if ($request->filled('status')) $q->where('status', $request->status);
         if ($request->filled('periode')) $q->where('periode', $request->periode);
+        if ($request->filled('siswa_id')) $q->where('siswa_id', $request->siswa_id);
+        if ($request->filled('kelas_id')) $q->where('kelas_id', $request->kelas_id);
         if ($request->filled('q')) {
             $kw = $request->q;
             $q->whereHas('siswa', fn($s) => $s->where('name','like',"%$kw%"));
         }
-        $tagihan = $q->orderByDesc('periode')->orderBy('jatuh_tempo')->paginate($this->perPage(25))->withQueryString();
-        $periodes = Tagihan::select('periode')->distinct()->orderByDesc('periode')->pluck('periode');
-        return view('tagihan.index', compact('tagihan','periodes'));
+        return $q;
+    }
+
+    private function filterLabels(Request $r): array {
+        $f = [];
+        if ($r->filled('periode')) $f[] = "Periode: {$r->periode}";
+        if ($r->filled('status')) $f[] = "Status: {$r->status}";
+        if ($r->filled('siswa_id')) {
+            $s = User::find($r->siswa_id);
+            if ($s) $f[] = "Siswa: {$s->name}";
+        }
+        if ($r->filled('kelas_id')) {
+            $k = Kelas::find($r->kelas_id);
+            if ($k) $f[] = "Kelas: {$k->nama}";
+        }
+        if ($r->filled('q')) $f[] = "Cari: {$r->q}";
+        return $f;
     }
 
     public function show(Tagihan $tagihan) {
