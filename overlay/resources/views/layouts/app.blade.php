@@ -122,6 +122,7 @@
         $isMaster = request()->routeIs('siswa.*') || request()->routeIs('kelas.*') || request()->routeIs('guru.*');
         $isKeu    = request()->routeIs('tagihan.*') || request()->routeIs('laporan.*');
         $isPeng   = request()->routeIs('pengingat.*');
+        $isJadwal = request()->routeIs('admin.pesan_template.*') || request()->routeIs('admin.jadwal_notif.*');
       @endphp
 
       <button type="button" class="menu-toggle {{ $isMaster ? 'open has-active' : '' }}" data-target="#sm-master">
@@ -144,7 +145,7 @@
       </div>
 
       <button type="button" class="menu-toggle {{ $isPeng ? 'open has-active' : '' }}" data-target="#sm-peng">
-        <i class="bi bi-bell me-2"></i><span class="label">Pengingat</span>
+        <i class="bi bi-bell me-2"></i><span class="label">Pengingat Tagihan</span>
         <span class="caret label"><i class="bi bi-chevron-down"></i></span>
       </button>
       <div class="submenu {{ $isPeng ? 'show' : '' }}" id="sm-peng">
@@ -153,6 +154,28 @@
         <a href="{{ route('pengingat.kirim.form') }}" class="{{ request()->routeIs('pengingat.kirim.*') ? 'active' : '' }}"><i class="bi bi-send me-2"></i><span class="label">Kirim Manual</span></a>
         <a href="{{ route('pengingat.log.index') }}" class="{{ request()->routeIs('pengingat.log.*') ? 'active' : '' }}"><i class="bi bi-clock-history me-2"></i><span class="label">Log</span></a>
       </div>
+
+      <button type="button" class="menu-toggle {{ $isJadwal ? 'open has-active' : '' }}" data-target="#sm-jadwal">
+        <i class="bi bi-calendar2-event me-2"></i><span class="label">Notif Jadwal</span>
+        <span class="caret label"><i class="bi bi-chevron-down"></i></span>
+      </button>
+      <div class="submenu {{ $isJadwal ? 'show' : '' }}" id="sm-jadwal">
+        <a href="{{ route('admin.pesan_template.index') }}" class="{{ request()->routeIs('admin.pesan_template.*') ? 'active' : '' }}"><i class="bi bi-file-earmark-text me-2"></i><span class="label">Template Pesan</span></a>
+        <a href="{{ route('admin.jadwal_notif.index') }}" class="{{ request()->routeIs('admin.jadwal_notif.*') ? 'active' : '' }}"><i class="bi bi-clock me-2"></i><span class="label">Pengaturan H-N</span></a>
+      </div>
+    @endif
+
+    @if(auth()->user()->isGuru())
+      <div class="group">Mengajar</div>
+      <a href="{{ route('guru.kelas.index') }}" class="{{ request()->routeIs('guru.kelas.*') ? 'active' : '' }}"><i class="bi bi-easel me-2"></i><span class="label">Kelas Saya</span></a>
+      <a href="{{ route('guru.siswa.index') }}" class="{{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}"><i class="bi bi-people me-2"></i><span class="label">Siswa Saya</span></a>
+      <a href="{{ route('guru.pesan.form') }}" class="{{ request()->routeIs('guru.pesan.*') ? 'active' : '' }}"><i class="bi bi-send me-2"></i><span class="label">Kirim Pesan</span></a>
+    @endif
+
+    @if(auth()->user()->isSiswa())
+      <div class="group">Belajar</div>
+      <a href="{{ route('siswa.kelas.index') }}" class="{{ request()->routeIs('siswa.kelas.*') ? 'active' : '' }}"><i class="bi bi-easel me-2"></i><span class="label">Kelas Saya</span></a>
+      <a href="{{ route('siswa.tagihan.index') }}" class="{{ request()->routeIs('siswa.tagihan.*') ? 'active' : '' }}"><i class="bi bi-receipt me-2"></i><span class="label">Tagihan Saya</span></a>
     @endif
 
     @if(auth()->user()->isSiswa() || auth()->user()->isGuru())

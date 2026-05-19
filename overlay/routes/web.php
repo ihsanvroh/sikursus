@@ -13,6 +13,13 @@ use App\Http\Controllers\Pengingat\TemplateController as PgTemplateController;
 use App\Http\Controllers\Pengingat\SettingController as PgSettingController;
 use App\Http\Controllers\Pengingat\KirimController as PgKirimController;
 use App\Http\Controllers\Pengingat\LogController as PgLogController;
+use App\Http\Controllers\Admin\JadwalNotifSettingController;
+use App\Http\Controllers\Admin\PesanJadwalTemplateController;
+use App\Http\Controllers\Guru\SiswaSayaController;
+use App\Http\Controllers\Guru\KelasSayaController as GuruKelasSayaController;
+use App\Http\Controllers\Guru\PesanJadwalController;
+use App\Http\Controllers\Siswa\KelasSayaController as SiswaKelasSayaController;
+use App\Http\Controllers\Siswa\TagihanSayaController;
 
 Route::get('/', fn() => redirect('/dashboard'));
 
@@ -69,5 +76,32 @@ Route::middleware('auth')->group(function () {
         Route::get('pengingat/kirim/tagihan', [PgKirimController::class,'ajaxTagihan'])->name('pengingat.kirim.ajax_tagihan');
 
         Route::get('pengingat/log', [PgLogController::class,'index'])->name('pengingat.log.index');
+
+        // Notifikasi Jadwal (admin)
+        Route::resource('admin/pesan-template', PesanJadwalTemplateController::class)
+            ->names('admin.pesan_template')
+            ->parameters(['pesan-template' => 'template']);
+
+        Route::get('admin/jadwal-notif', [JadwalNotifSettingController::class,'index'])->name('admin.jadwal_notif.index');
+        Route::post('admin/jadwal-notif', [JadwalNotifSettingController::class,'store'])->name('admin.jadwal_notif.store');
+        Route::put('admin/jadwal-notif/{setting}', [JadwalNotifSettingController::class,'update'])->name('admin.jadwal_notif.update');
+        Route::delete('admin/jadwal-notif/{setting}', [JadwalNotifSettingController::class,'destroy'])->name('admin.jadwal_notif.destroy');
+    });
+
+    // Guru only
+    Route::middleware('role:guru')->group(function () {
+        Route::get('guru/siswa-saya', [SiswaSayaController::class,'index'])->name('guru.siswa.index');
+        Route::get('guru/kelas-saya', [GuruKelasSayaController::class,'index'])->name('guru.kelas.index');
+        Route::get('guru/kelas-saya/{kela}', [GuruKelasSayaController::class,'show'])->name('guru.kelas.show')->scopeBindings();
+        Route::get('guru/pesan-jadwal', [PesanJadwalController::class,'form'])->name('guru.pesan.form');
+        Route::post('guru/pesan-jadwal', [PesanJadwalController::class,'send'])->name('guru.pesan.send');
+        Route::get('guru/pesan-jadwal/siswa', [PesanJadwalController::class,'ajaxSiswa'])->name('guru.pesan.ajax_siswa');
+    });
+
+    // Siswa only
+    Route::middleware('role:siswa')->group(function () {
+        Route::get('siswa/kelas-saya', [SiswaKelasSayaController::class,'index'])->name('siswa.kelas.index');
+        Route::get('siswa/tagihan-saya', [TagihanSayaController::class,'index'])->name('siswa.tagihan.index');
+        Route::get('siswa/tagihan-saya/{tagihan}/pdf', [TagihanSayaController::class,'downloadPdf'])->name('siswa.tagihan.pdf');
     });
 });

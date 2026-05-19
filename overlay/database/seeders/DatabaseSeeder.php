@@ -6,6 +6,8 @@ use App\Models\Kelas;
 use App\Models\Enrollment;
 use App\Models\Tagihan;
 use App\Models\JadwalKelas;
+use App\Models\PesanJadwalTemplate;
+use App\Models\JadwalNotifSetting;
 use App\Models\PengingatTemplate;
 use App\Models\PengingatSetting;
 use Illuminate\Database\Seeder;
@@ -133,6 +135,40 @@ class DatabaseSeeder extends Seeder {
         PengingatSetting::create(['template_id' => $tplH3->id, 'trigger_type' => 'before', 'hari_offset' => 3, 'aktif' => true]);
         PengingatSetting::create(['template_id' => $tplH0->id, 'trigger_type' => 'on', 'hari_offset' => 0, 'aktif' => true]);
         PengingatSetting::create(['template_id' => $tplH7->id, 'trigger_type' => 'after', 'hari_offset' => 7, 'aktif' => true]);
+
+        // Template pesan jadwal kelas (untuk guru)
+        PesanJadwalTemplate::create([
+            'nama' => 'Pengingat Besok Ada Les',
+            'judul' => 'Reminder: Besok ada kelas {kelas}',
+            'body' => "Halo {nama_siswa},\n\nMengingatkan besok ({tanggal}) ada kelas {kelas} pukul {jam}.\nJangan sampai lupa ya, datang tepat waktu.\n\nTerima kasih.",
+            'aktif' => true,
+        ]);
+        PesanJadwalTemplate::create([
+            'nama' => 'Kelas Diliburkan',
+            'judul' => 'Pemberitahuan: Kelas {kelas} libur',
+            'body' => "Halo {nama_siswa},\n\nMohon maaf, kelas {kelas} pada {tanggal} pukul {jam} diliburkan.\nKegiatan akan diganti di hari lain (info menyusul).\n\nTerima kasih atas pengertiannya.",
+            'aktif' => true,
+        ]);
+        PesanJadwalTemplate::create([
+            'nama' => 'Reminder Bawa Materi',
+            'judul' => 'Persiapan untuk kelas {kelas}',
+            'body' => "Halo {nama_siswa},\n\nUntuk kelas {kelas} besok ({tanggal} pukul {jam}), mohon bawa:\n- Buku catatan\n- Alat tulis\n- Materi yang sudah dibagikan minggu lalu\n\nSampai jumpa di kelas.",
+            'aktif' => true,
+        ]);
+
+        // Setting H-N notif jadwal default
+        JadwalNotifSetting::create([
+            'hari_offset' => 1,
+            'jam_kirim' => '19:00:00',
+            'aktif' => true,
+            'keterangan' => 'Pengingat malam sebelum kelas',
+        ]);
+        JadwalNotifSetting::create([
+            'hari_offset' => 0,
+            'jam_kirim' => '07:00:00',
+            'aktif' => false,
+            'keterangan' => 'Pengingat pagi hari kelas',
+        ]);
 
         echo "Seed selesai.\n";
         echo "Login: admin@sikursus.local / admin12345\n";
