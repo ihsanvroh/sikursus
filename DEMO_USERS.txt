@@ -6,7 +6,7 @@
 
 ┌──────────────────────────────────────────────────────────────┐
 │  APP 1 : KURSUS (PMB / Pendaftaran Calon Peserta)            │
-│  URL   : https://kursus.ihsannurk.web.id                     │
+│  URL   : https://yourdomain1.example.com (separate app)      │
 │  Stack : Laravel 8 + MySQL 8                                 │
 └──────────────────────────────────────────────────────────────┘
 
@@ -35,7 +35,7 @@
 
 ┌──────────────────────────────────────────────────────────────┐
 │  APP 2 : SIKURSUS (SPP Bulanan + Multi-Role + Pengingat)     │
-│  URL   : https://sikursus.ihsannurk.web.id                   │
+│  URL   : https://yourdomain.example.com                      │
 │  Stack : Laravel 11 + PHP 8.4 + MySQL 8                      │
 └──────────────────────────────────────────────────────────────┘
 

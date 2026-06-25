@@ -12,7 +12,7 @@ services:
       APP_NAME: "Si Kursus"
       APP_ENV: ${APP_ENV:-local}
       APP_DEBUG: ${APP_DEBUG:-true}
-      APP_URL: ${APP_URL:-https://sikursus.ihsannurk.web.id}
+      APP_URL: ${APP_URL:-https://yourdomain.example.com}
       APP_KEY: ${APP_KEY:-}
       LOG_CHANNEL: stack
       LOG_LEVEL: debug

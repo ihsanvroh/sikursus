@@ -4,7 +4,7 @@
 - Laravel 11 (PHP 8.3 + Apache mod_php)
 - MySQL 8.0
 - Cloudflare Tunnel (bundled)
-- URL: https://sikursus.ihsannurk.web.id
+- URL: `https://yourdomain.example.com` (your configured domain)
 
 ## Architecture
 
@@ -25,10 +25,10 @@ sikursus-db (MySQL 8)
 3. Name: `sikursus`
 4. **Copy token-nya** (string panjang)
 5. Tab **Public Hostname** → Add:
-   - Subdomain: `sikursus`
-   - Domain: `ihsannurk.web.id`
+   - Subdomain: `yoursubdomain`
+   - Domain: `yourdomain.com`
    - Type: HTTP
-   - URL: `sikursus-app:80`
+   - URL: `sikursus-app:80` (internal container name)
 6. Save
 
 ## Deploy
@@ -51,7 +51,7 @@ docker-compose logs -f sikursus-app
 
 # 4. Verify
 docker-compose ps
-curl -sI https://sikursus.ihsannurk.web.id
+curl -sI https://yourdomain.example.com
 ```
 
 ## Default Login

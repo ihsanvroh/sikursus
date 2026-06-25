@@ -2,7 +2,7 @@
 
 Aplikasi manajemen kursus dengan **SPP bulanan**, **multi-role** (Admin / Guru / Siswa), dan **sistem pengingat tagihan** otomatis.
 
-🔗 **Live**: https://sikursus.ihsannurk.web.id
+🔗 **Live**: `https://yourdomain.example.com` (configure your own domain)
 
 ---
 
